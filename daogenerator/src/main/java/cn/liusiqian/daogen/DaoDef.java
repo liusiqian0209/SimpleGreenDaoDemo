@@ -6,22 +6,21 @@ import org.greenrobot.greendao.generator.Schema;
 
 public class DaoDef
 {
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public static void main(String[] args){
         Schema schema = new Schema(DATABASE_VERSION,"cn.liusiqian.greendaodemo.db");
 
         Entity userEntity = schema.addEntity("User");
-        userEntity.addIdProperty();
-        userEntity.addIntProperty("work_id");
+        userEntity.addStringProperty("id").primaryKey();
         userEntity.addStringProperty("name");
         userEntity.addBooleanProperty("ismale");
         userEntity.addStringProperty("tel");
 
         Entity chatEntity = schema.addEntity("Chat");
-        chatEntity.addIdProperty();
-        chatEntity.addIntProperty("from");
-        chatEntity.addIntProperty("to");
+        chatEntity.addStringProperty("msgid").primaryKey();
+        chatEntity.addStringProperty("from");
+        chatEntity.addStringProperty("to");
         chatEntity.addStringProperty("message");
         chatEntity.addLongProperty("timestamp");
 

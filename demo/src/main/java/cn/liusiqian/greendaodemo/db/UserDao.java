@@ -13,7 +13,7 @@ import org.greenrobot.greendao.database.DatabaseStatement;
 /** 
  * DAO for table "USER".
 */
-public class UserDao extends AbstractDao<User, Long> {
+public class UserDao extends AbstractDao<User, String> {
 
     public static final String TABLENAME = "USER";
 
@@ -22,11 +22,10 @@ public class UserDao extends AbstractDao<User, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Work_id = new Property(1, Integer.class, "work_id", false, "WORK_ID");
-        public final static Property Name = new Property(2, String.class, "name", false, "NAME");
-        public final static Property Ismale = new Property(3, Boolean.class, "ismale", false, "ISMALE");
-        public final static Property Tel = new Property(4, String.class, "tel", false, "TEL");
+        public final static Property Id = new Property(0, String.class, "id", true, "ID");
+        public final static Property Name = new Property(1, String.class, "name", false, "NAME");
+        public final static Property Ismale = new Property(2, Boolean.class, "ismale", false, "ISMALE");
+        public final static Property Tel = new Property(3, String.class, "tel", false, "TEL");
     }
 
 
@@ -42,11 +41,10 @@ public class UserDao extends AbstractDao<User, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"USER\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"WORK_ID\" INTEGER," + // 1: work_id
-                "\"NAME\" TEXT," + // 2: name
-                "\"ISMALE\" INTEGER," + // 3: ismale
-                "\"TEL\" TEXT);"); // 4: tel
+                "\"ID\" TEXT PRIMARY KEY NOT NULL ," + // 0: id
+                "\"NAME\" TEXT," + // 1: name
+                "\"ISMALE\" INTEGER," + // 2: ismale
+                "\"TEL\" TEXT);"); // 3: tel
     }
 
     /** Drops the underlying database table. */
@@ -59,29 +57,24 @@ public class UserDao extends AbstractDao<User, Long> {
     protected final void bindValues(DatabaseStatement stmt, User entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
+        String id = entity.getId();
         if (id != null) {
-            stmt.bindLong(1, id);
-        }
- 
-        Integer work_id = entity.getWork_id();
-        if (work_id != null) {
-            stmt.bindLong(2, work_id);
+            stmt.bindString(1, id);
         }
  
         String name = entity.getName();
         if (name != null) {
-            stmt.bindString(3, name);
+            stmt.bindString(2, name);
         }
  
         Boolean ismale = entity.getIsmale();
         if (ismale != null) {
-            stmt.bindLong(4, ismale ? 1L: 0L);
+            stmt.bindLong(3, ismale ? 1L: 0L);
         }
  
         String tel = entity.getTel();
         if (tel != null) {
-            stmt.bindString(5, tel);
+            stmt.bindString(4, tel);
         }
     }
 
@@ -89,66 +82,58 @@ public class UserDao extends AbstractDao<User, Long> {
     protected final void bindValues(SQLiteStatement stmt, User entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
+        String id = entity.getId();
         if (id != null) {
-            stmt.bindLong(1, id);
-        }
- 
-        Integer work_id = entity.getWork_id();
-        if (work_id != null) {
-            stmt.bindLong(2, work_id);
+            stmt.bindString(1, id);
         }
  
         String name = entity.getName();
         if (name != null) {
-            stmt.bindString(3, name);
+            stmt.bindString(2, name);
         }
  
         Boolean ismale = entity.getIsmale();
         if (ismale != null) {
-            stmt.bindLong(4, ismale ? 1L: 0L);
+            stmt.bindLong(3, ismale ? 1L: 0L);
         }
  
         String tel = entity.getTel();
         if (tel != null) {
-            stmt.bindString(5, tel);
+            stmt.bindString(4, tel);
         }
     }
 
     @Override
-    public Long readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
+    public String readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0);
     }    
 
     @Override
     public User readEntity(Cursor cursor, int offset) {
         User entity = new User( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // work_id
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // name
-            cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0, // ismale
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // tel
+            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // id
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // name
+            cursor.isNull(offset + 2) ? null : cursor.getShort(offset + 2) != 0, // ismale
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // tel
         );
         return entity;
     }
      
     @Override
     public void readEntity(Cursor cursor, User entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setWork_id(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
-        entity.setName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setIsmale(cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0);
-        entity.setTel(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
+        entity.setName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setIsmale(cursor.isNull(offset + 2) ? null : cursor.getShort(offset + 2) != 0);
+        entity.setTel(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
      }
     
     @Override
-    protected final Long updateKeyAfterInsert(User entity, long rowId) {
-        entity.setId(rowId);
-        return rowId;
+    protected final String updateKeyAfterInsert(User entity, long rowId) {
+        return entity.getId();
     }
     
     @Override
-    public Long getKey(User entity) {
+    public String getKey(User entity) {
         if(entity != null) {
             return entity.getId();
         } else {

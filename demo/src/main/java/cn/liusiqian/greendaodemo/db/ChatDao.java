@@ -13,7 +13,7 @@ import org.greenrobot.greendao.database.DatabaseStatement;
 /** 
  * DAO for table "CHAT".
 */
-public class ChatDao extends AbstractDao<Chat, Long> {
+public class ChatDao extends AbstractDao<Chat, String> {
 
     public static final String TABLENAME = "CHAT";
 
@@ -22,9 +22,9 @@ public class ChatDao extends AbstractDao<Chat, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property From = new Property(1, Integer.class, "from", false, "FROM");
-        public final static Property To = new Property(2, Integer.class, "to", false, "TO");
+        public final static Property Msgid = new Property(0, String.class, "msgid", true, "MSGID");
+        public final static Property From = new Property(1, String.class, "from", false, "FROM");
+        public final static Property To = new Property(2, String.class, "to", false, "TO");
         public final static Property Message = new Property(3, String.class, "message", false, "MESSAGE");
         public final static Property Timestamp = new Property(4, Long.class, "timestamp", false, "TIMESTAMP");
     }
@@ -42,9 +42,9 @@ public class ChatDao extends AbstractDao<Chat, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"CHAT\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"FROM\" INTEGER," + // 1: from
-                "\"TO\" INTEGER," + // 2: to
+                "\"MSGID\" TEXT PRIMARY KEY NOT NULL ," + // 0: msgid
+                "\"FROM\" TEXT," + // 1: from
+                "\"TO\" TEXT," + // 2: to
                 "\"MESSAGE\" TEXT," + // 3: message
                 "\"TIMESTAMP\" INTEGER);"); // 4: timestamp
     }
@@ -59,19 +59,19 @@ public class ChatDao extends AbstractDao<Chat, Long> {
     protected final void bindValues(DatabaseStatement stmt, Chat entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
+        String msgid = entity.getMsgid();
+        if (msgid != null) {
+            stmt.bindString(1, msgid);
         }
  
-        Integer from = entity.getFrom();
+        String from = entity.getFrom();
         if (from != null) {
-            stmt.bindLong(2, from);
+            stmt.bindString(2, from);
         }
  
-        Integer to = entity.getTo();
+        String to = entity.getTo();
         if (to != null) {
-            stmt.bindLong(3, to);
+            stmt.bindString(3, to);
         }
  
         String message = entity.getMessage();
@@ -89,19 +89,19 @@ public class ChatDao extends AbstractDao<Chat, Long> {
     protected final void bindValues(SQLiteStatement stmt, Chat entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
+        String msgid = entity.getMsgid();
+        if (msgid != null) {
+            stmt.bindString(1, msgid);
         }
  
-        Integer from = entity.getFrom();
+        String from = entity.getFrom();
         if (from != null) {
-            stmt.bindLong(2, from);
+            stmt.bindString(2, from);
         }
  
-        Integer to = entity.getTo();
+        String to = entity.getTo();
         if (to != null) {
-            stmt.bindLong(3, to);
+            stmt.bindString(3, to);
         }
  
         String message = entity.getMessage();
@@ -116,16 +116,16 @@ public class ChatDao extends AbstractDao<Chat, Long> {
     }
 
     @Override
-    public Long readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
+    public String readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0);
     }    
 
     @Override
     public Chat readEntity(Cursor cursor, int offset) {
         Chat entity = new Chat( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // from
-            cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2), // to
+            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // msgid
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // from
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // to
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // message
             cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4) // timestamp
         );
@@ -134,23 +134,22 @@ public class ChatDao extends AbstractDao<Chat, Long> {
      
     @Override
     public void readEntity(Cursor cursor, Chat entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setFrom(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
-        entity.setTo(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
+        entity.setMsgid(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
+        entity.setFrom(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setTo(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setMessage(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setTimestamp(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
      }
     
     @Override
-    protected final Long updateKeyAfterInsert(Chat entity, long rowId) {
-        entity.setId(rowId);
-        return rowId;
+    protected final String updateKeyAfterInsert(Chat entity, long rowId) {
+        return entity.getMsgid();
     }
     
     @Override
-    public Long getKey(Chat entity) {
+    public String getKey(Chat entity) {
         if(entity != null) {
-            return entity.getId();
+            return entity.getMsgid();
         } else {
             return null;
         }
@@ -158,7 +157,7 @@ public class ChatDao extends AbstractDao<Chat, Long> {
 
     @Override
     public boolean hasKey(Chat entity) {
-        return entity.getId() != null;
+        return entity.getMsgid() != null;
     }
 
     @Override

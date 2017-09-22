@@ -11,8 +11,7 @@ import org.greenrobot.greendao.annotation.*;
 public class User {
 
     @Id
-    private Long id;
-    private Integer work_id;
+    private String id;
     private String name;
     private Boolean ismale;
     private String tel;
@@ -21,33 +20,24 @@ public class User {
     public User() {
     }
 
-    public User(Long id) {
+    public User(String id) {
         this.id = id;
     }
 
     @Generated
-    public User(Long id, Integer work_id, String name, Boolean ismale, String tel) {
+    public User(String id, String name, Boolean ismale, String tel) {
         this.id = id;
-        this.work_id = work_id;
         this.name = name;
         this.ismale = ismale;
         this.tel = tel;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
-    }
-
-    public Integer getWork_id() {
-        return work_id;
-    }
-
-    public void setWork_id(Integer work_id) {
-        this.work_id = work_id;
     }
 
     public String getName() {

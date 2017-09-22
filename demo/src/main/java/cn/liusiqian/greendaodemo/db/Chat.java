@@ -11,9 +11,9 @@ import org.greenrobot.greendao.annotation.*;
 public class Chat {
 
     @Id
-    private Long id;
-    private Integer from;
-    private Integer to;
+    private String msgid;
+    private String from;
+    private String to;
     private String message;
     private Long timestamp;
 
@@ -21,40 +21,40 @@ public class Chat {
     public Chat() {
     }
 
-    public Chat(Long id) {
-        this.id = id;
+    public Chat(String msgid) {
+        this.msgid = msgid;
     }
 
     @Generated
-    public Chat(Long id, Integer from, Integer to, String message, Long timestamp) {
-        this.id = id;
+    public Chat(String msgid, String from, String to, String message, Long timestamp) {
+        this.msgid = msgid;
         this.from = from;
         this.to = to;
         this.message = message;
         this.timestamp = timestamp;
     }
 
-    public Long getId() {
-        return id;
+    public String getMsgid() {
+        return msgid;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setMsgid(String msgid) {
+        this.msgid = msgid;
     }
 
-    public Integer getFrom() {
+    public String getFrom() {
         return from;
     }
 
-    public void setFrom(Integer from) {
+    public void setFrom(String from) {
         this.from = from;
     }
 
-    public Integer getTo() {
+    public String getTo() {
         return to;
     }
 
-    public void setTo(Integer to) {
+    public void setTo(String to) {
         this.to = to;
     }
 
