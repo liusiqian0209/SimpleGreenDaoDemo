@@ -10,10 +10,17 @@ import com.facebook.stetho.Stetho;
 
 public class GreenDaoApplication extends Application
 {
+    private static GreenDaoApplication instance;
+
     @Override
     public void onCreate()
     {
         super.onCreate();
+        instance = this;
         Stetho.initializeWithDefaults(this);
+    }
+
+    public static GreenDaoApplication getInstance() {
+        return instance;
     }
 }
